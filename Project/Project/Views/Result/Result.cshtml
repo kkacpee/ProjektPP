@@ -1,0 +1,33 @@
+﻿@model Photo
+@{
+    ViewData["Title"] = "Result";
+}
+
+<h1>Result</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <img src="@Model.Url" class="card-img" />
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    @Model.ResX x @Model.ResY
+                </div>
+                <div class="card-body">
+                    <h4> Comments: </h4>
+                    <ul class="list-group list-group-flush ">
+                        <li class="list-group-item bg-dark"> Fajen Ten Pjes</li>
+                        <li class="list-group-item bg-dark"> Kox</li>
+                        <li class="list-group-item bg-dark"> Dej mi go</li>
+                        <li class="list-group-item bg-dark"> ALE RZULTY XD</li>
+                        <li class="list-group-item bg-dark"> TO JEST PLAGIAT Z 9GAGA</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

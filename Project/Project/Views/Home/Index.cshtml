@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+    <div>
+        <span></span>
+    </div>
+    <div>
+        <form class="s-form" asp-controller="Result" asp-action="Search">
+            <input class="s-input" type="text" name="phrase" required>
+            
+            <button type="submit" ><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+
+@section Links {
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link href="~/css/search.css" rel="stylesheet" />
+}
