@@ -24,5 +24,10 @@ namespace Project.Models
             context.SaveChanges();
             return search;
         }
+
+        public IEnumerable<Search> GetAllSearches()
+        {
+            return context.Searches;
+        }
     }
 }

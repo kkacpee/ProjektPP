@@ -8,5 +8,6 @@ namespace Project.Models
     public interface ISearchRepository
     {
         Search Add(Search search);
+        IEnumerable<Search> GetAllSearches();
     }
 }

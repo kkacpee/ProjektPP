@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Project.Models;
 using Project.ViewModels;
 
 namespace Project.Controllers
@@ -14,12 +15,19 @@ namespace Project.Controllers
     {
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<IdentityUser> userManager;
+        private readonly ISearchRepository searchRepository;
+        private readonly IEngineRepository engineRepository;
 
         public AdministrationController(RoleManager<IdentityRole> roleManager, 
-                                        UserManager<IdentityUser> userManager)
+                                        UserManager<IdentityUser> userManager,
+                                        ISearchRepository searchRepository,
+                                        IEngineRepository engineRepository
+                                        )
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
+            this.searchRepository = searchRepository;
+            this.engineRepository = engineRepository;
         }
         [HttpGet]
         public IActionResult CreateRole()
@@ -282,6 +290,48 @@ namespace Project.Controllers
                     return View("ListUsers");
                 }
             }
-        
+
+        [HttpGet]
+        public IActionResult ListEngines()
+        {
+            var engines = engineRepository.GetAllEngines();
+            return View(engines);
+        }
+
+        [HttpGet]
+        public IActionResult CreateEngine()
+        {
+            return View();
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateEngine(Engine model)
+        {
+            if (ModelState.IsValid)
+            {
+                engineRepository.Add(model);
+            }
+            return RedirectToAction("ListEngines");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteEngine(int id)
+        {
+            engineRepository.Delete(id);
+            return RedirectToAction("ListEngines");
+        }
+
+        [HttpGet]
+        public IActionResult ListSearches()
+        {
+            var searches = searchRepository.GetAllSearches();
+            List<Search> list = new List<Search>();
+            list = searches.ToList();
+            list.Reverse();
+            return View(list);
+        }
+
     }
 }

@@ -42,6 +42,8 @@ namespace Project
 
             services.AddScoped<IPhotoRepository, SQLPhotoRepository>();
             services.AddScoped<ISearchRepository, SQLSearchRepository>();
+            services.AddScoped<ICommentRepository, SQLCommentRepository>();
+            services.AddScoped<IEngineRepository, SQLEngineRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

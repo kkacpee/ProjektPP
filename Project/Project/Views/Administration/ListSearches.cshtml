@@ -1,0 +1,45 @@
+﻿@model List<Search>
+
+
+@{
+    ViewBag.Title = "All Searches";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <p class="display-1">All Searches</p>
+        </div>
+    </div>
+    @if (Model.Any())
+    {
+        <div class="col-12">
+            @foreach (var search in Model)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        Search Id : @search.ID
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                           Phrase : @search.Phrase
+                        </h5>
+                        <h5 class="card-title">
+                           Date : @search.Date
+                        </h5>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                No searches yet
+            </div>
+            <div class="card-body">
+            </div>
+        </div>
+    }
+</div>

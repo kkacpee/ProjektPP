@@ -36,31 +36,38 @@
                                 <div class="dropdown-menu bg-dark border border-top-0" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="nav-link py-1 text-light" asp-area="" asp-controller="Administration" asp-action="ListUsers">Users</a>
                                     <a class="nav-link py-1 text-light" asp-area="" asp-controller="Administration" asp-action="ListRoles">Roles</a>
-                                    <a class="nav-link py-1 text-light" asp-area="" asp-controller="Lists" asp-action="Results">Results</a>
+                                    <a class="nav-link py-1 text-light" asp-area="" asp-controller="Administration" asp-action="ListEngines">Engines</a>
+                                    <a class="nav-link py-1 text-light" asp-area="" asp-controller="Administration" asp-action="ListSearches">Searches</a>
                                 </div>
                             </li>
                         }
                         @if (signInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item ml-auto">
-                                <form method="post" asp-action="logout" asp-controller="account">
-                                    <button type="submit" class="nav-link btn btn-link py-1">
-                                        Logout
-                                    </button>
-                                </form>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link py-1 text-light" asp-area="" asp-controller="" asp-action="">@User.Identity.Name</a>
-                            </li>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <form method="post" asp-action="logout" asp-controller="account">
+                                <button type="submit" class="nav-link btn btn-link py-1">
+                                    Logout
+                                </button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-1 text-light" asp-area="" asp-controller="" asp-action="">@User.Identity.Name</a>
+                        </li>
+                    </ul>
+                            
                         }
                         else
                         {
-                            <li class="nav-item ml-auto">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
                                 <a class="nav-link py-1 text-light" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link py-1 text-light" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
                             </li>
+                        </ul>
+                            
                         }
 
                     </ul>

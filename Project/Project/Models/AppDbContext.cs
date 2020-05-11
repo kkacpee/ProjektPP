@@ -19,6 +19,7 @@ namespace Project.Models
         public DbSet<Score> Scores { get; set; }
         public DbSet<Result> Results { get; set; }
         public DbSet<Search> Searches { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

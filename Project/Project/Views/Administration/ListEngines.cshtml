@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Engine>
+
+
+@{
+    ViewBag.Title = "All Engines";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <p class="display-1">All Enginges</p>
+        </div>
+        <div class="col-2 offset-4 align-self-center ">
+            <a class="btn btn-primary mb-3" asp-action="CreateEngine" asp-controller="Administration"> Add New Engine</a>
+        </div>
+    </div>
+    @if (Model.Any())
+    {
+        <div class="col-12">
+            @foreach (var engine in Model)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        Role Id : @engine.ID
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @engine.Name
+                        </h5>
+                        <h5 class="card-title">
+                            @engine.Address
+                        </h5>
+                        <h5 class="card-title">
+                            @engine.Description
+                        </h5>
+                    </div>
+                    <div class="card-footer">
+                        <form asp-action="DeleteEngine" asp-route-id="@engine.ID" method="post">
+                            <a class="btn btn-primary"
+                               asp-controller="Administration" asp-action="EditEngine" asp-route-id="@engine.ID">
+                                Edit
+                            </a>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                No engines added yet
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    Use the button above to add an engine
+                </h5>
+            </div>
+        </div>
+    }
+</div>

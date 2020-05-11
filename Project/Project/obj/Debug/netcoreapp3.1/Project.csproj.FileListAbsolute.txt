@@ -412,11 +412,8 @@ C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\ru\Microsoft.CodeAnalysis.Wo
 C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Project.MvcApplicationPartsAssemblyInfo.cs
-C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Project.MvcApplicationPartsAssemblyInfo.cache
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Account\Register.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Account\Login.cshtml.g.cs
-C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Lists\Users.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\CreateRole.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\ListRoles.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Shared\NotFound.cshtml.g.cs
@@ -427,3 +424,15 @@ C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\L
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\EditUser.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Result\Search.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Result\Result.cshtml.g.cs
+C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\Microsoft.Dynamic.dll
+C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\Microsoft.Scripting.Metadata.dll
+C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\Microsoft.Scripting.dll
+C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\IronPython.Modules.dll
+C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\IronPython.SQLite.dll
+C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\IronPython.dll
+C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\System.CodeDom.dll
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Project.MvcApplicationPartsAssemblyInfo.cs
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Project.MvcApplicationPartsAssemblyInfo.cache
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\ListEngines.cshtml.g.cs
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\ListSearches.cshtml.g.cs
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\CreateEngine.cshtml.g.cs

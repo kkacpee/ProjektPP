@@ -1,4 +1,5 @@
-﻿@model Photo
+﻿@model PhotoCommentsViewModel
+@inject UserManager<IdentityUser> userManager
 @{
     ViewData["Title"] = "Result";
 }
@@ -18,13 +19,51 @@
                     @Model.ResX x @Model.ResY
                 </div>
                 <div class="card-body">
+                    <h5>Add Comment</h5>
+                    <form class="form-inline" method="post" role="form">
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="content" placeholder="Your comments" required/>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-default text-white" type="submit">Add</button>
+                        </div>
+                    </form>
                     <h4> Comments: </h4>
                     <ul class="list-group list-group-flush ">
-                        <li class="list-group-item bg-dark"> Fajen Ten Pjes</li>
-                        <li class="list-group-item bg-dark"> Kox</li>
-                        <li class="list-group-item bg-dark"> Dej mi go</li>
-                        <li class="list-group-item bg-dark"> ALE RZULTY XD</li>
-                        <li class="list-group-item bg-dark"> TO JEST PLAGIAT Z 9GAGA</li>
+                        @if (Model.Comments.Any())
+                        {
+                            @foreach (var comment in Model.Comments)
+                            {
+                                <li class="list-group-item bg-dark border-white">
+                                    <div>
+                                        <span class="ml-auto font-weight-bold"> @comment.UserName</span> @comment.Date
+                                        @if (User.IsInRole("Admin") || User.Identity.Name == comment.UserName)
+                                        {
+                                            <span class="dropdown float-right font-weight-bold">
+                                                <a id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    . . .
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="dLabel">
+                                                    <form asp-action="DeleteComment" asp-route-id="@comment.ID" asp-route-photoId="@Model.ID" method="post">
+                                                        <a class="dropdown-item" href=""> Edit Comment</a>
+                                                        <button class="dropdown-item" type="submit"> Delete Comment</button>
+                                                    </form>
+                                                </div>
+                                            </span>
+                                        }
+                                    </div>
+                                    @comment.Content
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <p>Siema</p>
+                            }
+                        }
+
                     </ul>
                 </div>
             </div>
