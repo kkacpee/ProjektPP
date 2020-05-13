@@ -434,5 +434,7 @@ C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\System.CodeDom.dll
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\ListEngines.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\ListSearches.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\CreateEngine.cshtml.g.cs
+C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
+C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Project.MvcApplicationPartsAssemblyInfo.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Project.MvcApplicationPartsAssemblyInfo.cache

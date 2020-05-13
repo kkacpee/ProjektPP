@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -337,6 +338,7 @@ namespace Project.Controllers
         [HttpGet]
         public JsonResult JsonSearchList()
         {
+           
             var searches = searchRepository.GetAllSearches();
             List<Search> list = new List<Search>();
             list = searches.ToList();
@@ -353,6 +355,16 @@ namespace Project.Controllers
               list = JsonConvert.DeserializeObject<List<Search>>(str);
               return View("ListSearches", list);
             //return str;
+        }
+
+        [HttpGet]
+        public string JsonTest()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get,
+            "https://jsonplaceholder.typicode.com/todos/1");
+            string str = "";
+            str = request.ToString();
+            return str;
         }
 
     }

@@ -34,12 +34,7 @@ namespace Project.Controllers
 
         public IActionResult Search(string phrase)
         {
-            Search search = new Search 
-            { 
-                Phrase = phrase, 
-                Date = DateTime.Now 
-            };
-            _searchRepository.Add(search);
+            
             IEnumerable<Photo> photos = _photoRepository.GetAllPhotos();
             return View(photos.ToList());
         }
