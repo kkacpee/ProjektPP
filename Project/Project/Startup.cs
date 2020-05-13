@@ -29,7 +29,8 @@ namespace Project
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;

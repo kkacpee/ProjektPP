@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Project.Models;
 using Project.ViewModels;
 
@@ -331,6 +332,27 @@ namespace Project.Controllers
             list = searches.ToList();
             list.Reverse();
             return View(list);
+        }
+
+        [HttpGet]
+        public JsonResult JsonSearchList()
+        {
+            var searches = searchRepository.GetAllSearches();
+            List<Search> list = new List<Search>();
+            list = searches.ToList();
+            list.Reverse();
+            return Json(list);
+        }
+
+        [HttpGet]
+        public IActionResult List()
+        {
+            var result = JsonSearchList();
+            var str = JsonConvert.SerializeObject(result.Value, Formatting.Indented);
+             var list = new List<Search>();
+              list = JsonConvert.DeserializeObject<List<Search>>(str);
+              return View("ListSearches", list);
+            //return str;
         }
 
     }

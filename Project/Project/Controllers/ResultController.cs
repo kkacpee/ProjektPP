@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -91,6 +92,13 @@ namespace Project.Controllers
         {
             _commentRepository.Delete(id);
             return RedirectToAction("Result", new { id = photoId });
+        }
+
+        [HttpGet]
+        public IActionResult GetJson(string json)
+        {
+            
+            return View();
         }
     }
 }
