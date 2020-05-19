@@ -29,5 +29,10 @@ namespace Project.Models
         {
             return context.Searches;
         }
+
+        public Search GetSearch(int id)
+        {
+            return context.Searches.Find(id);
+        }
     }
 }

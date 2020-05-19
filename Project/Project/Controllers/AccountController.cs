@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Project.Models;
 using Project.ViewModels;
 
 namespace Project.Controllers
@@ -13,12 +14,18 @@ namespace Project.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly IHistoryRepository historyRepository;
+        private readonly ISearchRepository searchRepository;
 
         public AccountController(UserManager<IdentityUser> userManager, 
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            IHistoryRepository historyRepository,
+            ISearchRepository searchRepository)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.historyRepository = historyRepository;
+            this.searchRepository = searchRepository;
         }
         [HttpGet]
         [AllowAnonymous]
@@ -57,8 +64,10 @@ namespace Project.Controllers
                 {
                     if(signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
+                        await userManager.AddToRoleAsync(user, "Admin");
                         return RedirectToAction("ListUsers", "Administration");
                     }
+                    await userManager.AddToRoleAsync(user, "User");
                     await signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("index", "home");
                 }
@@ -112,6 +121,34 @@ namespace Project.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Profile(string name)
+        {
+            ViewBag.Name = name;
+            if (User.IsInRole("Admin") || User.Identity.Name == name)
+            {
+                var user = await userManager.FindByNameAsync(name);
+                ViewBag.ID = user.Id;
+                var results = historyRepository.GetHistoryForUser(user.Id);
+                List<History> list = new List<History>();
+                list = results.ToList();
+                HistoriesWithNames hisWithName;
+                List<HistoriesWithNames> listWithNames = new List<HistoriesWithNames>();
+                foreach (var his in list)
+                {
+                    var usr = await userManager.FindByIdAsync(his.UserId);
+                    var srch = searchRepository.GetSearch(his.SearchId);
+                    hisWithName = new HistoriesWithNames(his, usr.Email, srch.Phrase);
+                    listWithNames.Add(hisWithName);
+                }
+                listWithNames.Reverse();
+
+
+                return View(listWithNames);
+            }
+            return RedirectToAction("AccessDenied");
         }
     }
 }

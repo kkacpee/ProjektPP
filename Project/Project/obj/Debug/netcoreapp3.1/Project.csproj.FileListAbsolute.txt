@@ -438,3 +438,6 @@ C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.d
 C:\Projects\Project\Project\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Project.MvcApplicationPartsAssemblyInfo.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Project.MvcApplicationPartsAssemblyInfo.cache
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\EditEngine.cshtml.g.cs
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\ListHistories.cshtml.g.cs
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Account\Profile.cshtml.g.cs

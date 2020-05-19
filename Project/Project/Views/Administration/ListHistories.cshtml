@@ -1,0 +1,50 @@
+﻿@model List<HistoriesWithNames>
+
+
+@{
+    ViewBag.Title = "All Histories";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <p class="display-1">All Histories</p>
+        </div>
+    </div>
+    @if (Model.Any())
+    {
+        <div class="col-12">
+            @foreach (var history in Model)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        History Id : @history.ID
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            User : <a asp-controller="Account" asp-action="Profile" asp-route-name="@history.UserName">@history.UserName</a>
+                            <form asp-controller="Administration" asp-action="DeleteHistory" asp-route-id="@history.ID" asp-route-name="" method="post">
+                                <button type="submit" class="btn btn-danger float-right">Delete Entry</button>
+                            </form>
+                        </h5>
+                        <h5 class="card-title">
+                            Search Phrase : @history.Phrase
+                            <br />
+                            Search Date : @history.Date
+                        </h5>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                No histories yet
+            </div>
+            <div class="card-body">
+            </div>
+        </div>
+    }
+</div>

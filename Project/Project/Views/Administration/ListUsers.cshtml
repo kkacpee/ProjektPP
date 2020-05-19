@@ -10,7 +10,7 @@
             <p class="display-1">All Users</p>
         </div>
         <div class="col-2 offset-4 align-self-center ">
-            <a class="btn btn-primary mb-3" asp-action="Register" asp-controller="Account"> Add New User </a>
+            <a class="btn btn-primary mb-3" asp-action="Register" asp-controller="Account"> Add New Admin </a>
         </div>
     </div>
 
@@ -21,7 +21,7 @@
             {
                 <div class="card">
                     <div class="card-header">
-                        Role Id : @user.Id
+                        User Id : @user.Id
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">
@@ -52,7 +52,7 @@
             </div>
             <div class="card-body">
                 <h5 class="card-title">
-                    Use the button above to register a user
+                    Use the button above to register an admin, or click Register to register new user
                 </h5>
             </div>
         </div>

@@ -38,6 +38,7 @@
                                     <a class="nav-link py-1 text-light" asp-area="" asp-controller="Administration" asp-action="ListRoles">Roles</a>
                                     <a class="nav-link py-1 text-light" asp-area="" asp-controller="Administration" asp-action="ListEngines">Engines</a>
                                     <a class="nav-link py-1 text-light" asp-area="" asp-controller="Administration" asp-action="ListSearches">Searches</a>
+                                    <a class="nav-link py-1 text-light" asp-area="" asp-controller="Administration" asp-action="ListHistories">Histories</a>
                                     <a class="nav-link py-1 text-light" asp-area="" asp-controller="Administration" asp-action="List">Jsn</a>
                                     <a class="nav-link py-1 text-light" asp-area="" asp-controller="Http" asp-action="Index">Test</a>
                                 </div>
@@ -54,7 +55,7 @@
                             </form>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link py-1 text-light" asp-area="" asp-controller="" asp-action="">@User.Identity.Name</a>
+                            <a class="nav-link py-1 text-light" asp-area="" asp-controller="account" asp-action="profile" asp-route-name="@User.Identity.Name">@User.Identity.Name</a>
                         </li>
                     </ul>
                             

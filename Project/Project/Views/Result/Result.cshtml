@@ -45,14 +45,19 @@
                                                 </a>
                                                 <div class="dropdown-menu" aria-labelledby="dLabel">
                                                     <form asp-action="DeleteComment" asp-route-id="@comment.ID" asp-route-photoId="@Model.ID" method="post">
-                                                        <a class="dropdown-item" href=""> Edit Comment</a>
-                                                        <button class="dropdown-item" type="submit"> Delete Comment</button>
+                                                        <button class="dropdown-item" type="button" onclick="    document.getElementById(17B).hidden = false;"> Edit Comment</button>
+                                                        <button class="dropdown-item" type="submit" > Delete Comment</button>
                                                     </form>
                                                 </div>
                                             </span>
                                         }
                                     </div>
-                                    @comment.Content
+                                    <form asp-action="UpdateComment" asp-route-id="@comment.ID" asp-route-photoId="@Model.ID" method="post">
+                                        <textarea id="@comment.ID" disabled>@comment.Content</textarea>
+                                        @{var str = comment.ID + "B";}
+                                        <button id="@str" hidden type="submit" onclick="this.hidden=true">OK</button>
+                                    </form>
+                          
                                 </li>
                             }
                         }
@@ -70,3 +75,7 @@
         </div>
     </div>
 </div>
+
+@section Links {
+<script src="~/js/site.js"></script>
+}

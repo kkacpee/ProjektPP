@@ -42,7 +42,7 @@ namespace Project.Models
 
         public Engine GetEngine(int Id)
         {
-            throw new NotImplementedException();
+            return context.Engines.Find(Id);
         }
 
         public Engine Update(Engine engineChanges)

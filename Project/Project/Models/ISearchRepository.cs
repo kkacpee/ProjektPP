@@ -9,5 +9,7 @@ namespace Project.Models
     {
         Search Add(Search search);
         IEnumerable<Search> GetAllSearches();
+
+        Search GetSearch(int id);
     }
 }

@@ -1,0 +1,49 @@
+﻿@model List<HistoriesWithNames>
+@{
+    ViewData["Title"] = "Profile";
+}
+    <div class="container">
+        <div class="card">
+            <div class="row">
+                <div class="col-9">
+                    <div class="card-body display-3">
+                        @ViewBag.Name
+                    </div>
+                  
+                </div>
+                <div class="col-3 d-flex justify-content-center align-items-center">
+                    <form asp-controller="Administration" asp-action="DeleteUser" asp-route-id="@ViewBag.ID" method="post">
+                        <button type="submit" class="btn btn-danger">Delete Account</button>
+                    </form>
+                </div>
+                <div class="col-12">
+                    <div class="card-footer text-center">
+                        Count of searches: @Model.Count
+                    </div>
+                </div>
+            </div>
+            @foreach (var history in Model)
+            {
+                
+        <div class="card-header border-top">
+            History Id : @history.ID
+
+            <form asp-controller="Administration" asp-action="DeleteHistory" asp-route-id="@history.ID" asp-route-name="@history.UserName" method="post">
+                <button type="submit" class="btn btn-danger btn-sm float-right">Delete Entry</button>
+            </form>
+            <button class="btn btn-dark btn-sm float-right mr-1">Peak result</button>
+        </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            User : @history.UserName
+                        </h5>
+                        <h5 class="card-title">
+                            Search Phrase : @history.Phrase
+                            <br />
+                            Search Date : @history.Date
+                        </h5>
+                    </div>
+            }
+        </div>
+    </div>
+   

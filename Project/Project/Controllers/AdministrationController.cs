@@ -19,17 +19,23 @@ namespace Project.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly ISearchRepository searchRepository;
         private readonly IEngineRepository engineRepository;
+        private readonly IResultRepository resultRepository;
+        private readonly IHistoryRepository historyRepository;
 
-        public AdministrationController(RoleManager<IdentityRole> roleManager, 
+        public AdministrationController(RoleManager<IdentityRole> roleManager,
                                         UserManager<IdentityUser> userManager,
                                         ISearchRepository searchRepository,
-                                        IEngineRepository engineRepository
+                                        IEngineRepository engineRepository,
+                                        IResultRepository resultRepository,
+                                        IHistoryRepository historyRepository
                                         )
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
             this.searchRepository = searchRepository;
             this.engineRepository = engineRepository;
+            this.resultRepository = resultRepository;
+            this.historyRepository = historyRepository;
         }
         [HttpGet]
         public IActionResult CreateRole()
@@ -53,7 +59,7 @@ namespace Project.Controllers
                     return RedirectToAction("ListRoles", "Administration");
                 }
 
-                foreach(IdentityError error in result.Errors)
+                foreach (IdentityError error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
@@ -74,7 +80,7 @@ namespace Project.Controllers
         {
             var role = await roleManager.FindByIdAsync(id);
 
-            if(role == null)
+            if (role == null)
             {
                 ViewBag.ErrorMessage = $"Role with Id = {id} cannot be found";
                 return View("NotFound");
@@ -86,9 +92,9 @@ namespace Project.Controllers
                 RoleName = role.Name
             };
 
-            foreach(var user in userManager.Users)
+            foreach (var user in userManager.Users)
             {
-                if(await userManager.IsInRoleAsync(user, role.Name))
+                if (await userManager.IsInRoleAsync(user, role.Name))
                 {
                     model.Users.Add(user.UserName);
                 }
@@ -126,20 +132,20 @@ namespace Project.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> EditUsersInRole(string roleId) 
+        public async Task<IActionResult> EditUsersInRole(string roleId)
         {
             ViewBag.roleId = roleId;
 
             var role = await roleManager.FindByIdAsync(roleId);
 
-            if(role == null)
+            if (role == null)
             {
                 ViewBag.ErrorMessage = $"Role with Id = {roleId} cannot be found";
                 return View("NotFound");
             }
 
             var model = new List<UserRoleViewModel>();
-            foreach(var user in userManager.Users)
+            foreach (var user in userManager.Users)
             {
                 var userRoleViewModel = new UserRoleViewModel
                 {
@@ -147,7 +153,7 @@ namespace Project.Controllers
                     UserName = user.UserName
                 };
 
-                if(await userManager.IsInRoleAsync(user, role.Name))
+                if (await userManager.IsInRoleAsync(user, role.Name))
                 {
                     userRoleViewModel.IsSelected = true;
                 }
@@ -172,7 +178,7 @@ namespace Project.Controllers
                 return View("NotFound");
             }
 
-            for(int i = 0; i < model.Count; i++)
+            for (int i = 0; i < model.Count; i++)
             {
                 var user = await userManager.FindByIdAsync(model[i].UserId);
 
@@ -266,32 +272,34 @@ namespace Project.Controllers
                 return View(model);
             }
         }
+
+        [Authorize(Roles = "User")]
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+
+            if (user == null)
             {
-                var user = await userManager.FindByIdAsync(id);
-
-                if (user == null)
-                {
-                    ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
-                    return View("NotFound");
-                }
-                else
-                {
-                   var result = await userManager.DeleteAsync(user);
-
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("ListUsers");
-                    }
-
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-                    return View("ListUsers");
-                }
+                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                return View("NotFound");
             }
+            else
+            {
+                var result = await userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ListUsers");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return View("ListUsers");
+            }
+        }
 
         [HttpGet]
         public IActionResult ListEngines()
@@ -309,7 +317,7 @@ namespace Project.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateEngine(Engine model)
+        public IActionResult CreateEngine(Engine model)
         {
             if (ModelState.IsValid)
             {
@@ -326,6 +334,20 @@ namespace Project.Controllers
         }
 
         [HttpGet]
+        public IActionResult EditEngine(int id)
+        {
+            var model = engineRepository.GetEngine(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult EditEngine(Engine model)
+        {
+            engineRepository.Update(model);
+            return RedirectToAction("ListEngines");
+        }
+
+        [HttpGet]
         public IActionResult ListSearches()
         {
             var searches = searchRepository.GetAllSearches();
@@ -334,6 +356,38 @@ namespace Project.Controllers
             list.Reverse();
             return View(list);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ListHistories()
+        {
+            var results = historyRepository.GetAllHistories();
+            List<History> list = new List<History>();
+            list = results.ToList();
+            HistoriesWithNames hisWithName;
+            List<HistoriesWithNames> listWithNames = new List<HistoriesWithNames>();
+            foreach(var his in list)
+            {
+                var usr = await userManager.FindByIdAsync(his.UserId);
+                var srch = searchRepository.GetSearch(his.SearchId);
+                hisWithName = new HistoriesWithNames(his, usr.Email, srch.Phrase);
+                listWithNames.Add(hisWithName);
+            }
+            listWithNames.Reverse();
+            return View(listWithNames);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost]
+        public IActionResult DeleteHistory(int id, string name)
+        {
+            historyRepository.Delete(id);
+            if (name.Any())
+            {
+                return RedirectToAction("Profile", "Account", new { name = name });
+            }
+            return RedirectToAction("ListHistories");
+        }
+
 
         [HttpGet]
         public JsonResult JsonSearchList()

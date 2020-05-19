@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Project.Models;
 using Project.ViewModels;
 
@@ -14,28 +16,56 @@ namespace Project.Controllers
     {
         private readonly IPhotoRepository _photoRepository;
         private readonly ISearchRepository _searchRepository;
+        private readonly IHistoryRepository _historyRepository;
         private readonly ICommentRepository _commentRepository;
+        private readonly IResultRepository _resultRepository;
         private readonly UserManager<IdentityUser> userManager;
+        private readonly SignInManager<IdentityUser> signInManager;
 
         public ResultController(IPhotoRepository photoRepository, 
-            ISearchRepository searchRepository, 
+            ISearchRepository searchRepository,
+            IHistoryRepository historyRepository,
             ICommentRepository commentRepository,
-             UserManager<IdentityUser> userManager)
+            IResultRepository resultRepository,
+             UserManager<IdentityUser> userManager,
+             SignInManager<IdentityUser> signInManager)
         {
             _photoRepository = photoRepository;
             _searchRepository = searchRepository;
+            _historyRepository = historyRepository;
             _commentRepository = commentRepository;
+            _resultRepository = resultRepository;
             this.userManager = userManager;
+            this.signInManager = signInManager;
         }
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Search(string phrase)
+        public async Task<IActionResult> Search(string phrase)
         {
-            
-            IEnumerable<Photo> photos = _photoRepository.GetAllPhotos();
+            var search = new Search
+            {
+                Phrase = phrase,
+                Date = DateTime.Now
+            };
+            _searchRepository.Add(search);
+            if (signInManager.IsSignedIn(User))
+            {
+                var user = await userManager.FindByNameAsync((User.Identity.Name));
+                var history = new History
+                {
+                    Date = search.Date,
+                    SearchId = search.ID,
+                    UserId = user.Id
+                };
+                _historyRepository.Add(history);
+            }
+            List<Photo> listFromApi = ApiHandler("https://jsonplaceholder.typicode.com/", search);
+            if (listFromApi.Any())
+                return View(listFromApi);
+            IEnumerable <Photo> photos = _photoRepository.GetAllPhotos();
             return View(photos.ToList());
         }
 
@@ -94,6 +124,47 @@ namespace Project.Controllers
         {
             
             return View();
+     
+        }
+
+        public List<Photo> ApiHandler(string uri, Search search)
+        {
+            var outputList = new List<Photo>();
+            string str;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(uri);
+                var responseTask = client.GetAsync(search.Phrase);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readJob = result.Content.ReadAsStringAsync();
+                    readJob.Wait();
+                    str = readJob.Result;
+                    var list = JsonConvert.DeserializeObject<List<Photo>>(str);
+
+                    Result res;
+                    foreach (var photo in list)
+                    {
+                        var returnedPhoto = _photoRepository.Add(photo);
+                        outputList.Add(returnedPhoto);
+                        res = new Result
+                        {
+                            PhotoId = returnedPhoto.ID,
+                            EngineId = 1,
+                            SearchId = search.ID
+                        };
+                        _resultRepository.Add(res);
+                    }
+                }
+                else
+                {
+                }
+
+                return outputList;
+            }
         }
     }
 }
