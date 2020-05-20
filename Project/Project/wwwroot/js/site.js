@@ -3,11 +3,8 @@
 
 // Write your JavaScript code.
 
+$(document).on("click", ".edit-btn", function (event) {
+    console.log("siema");
+    $('.' + event.target.id + '.toglable').toggleClass('d-none');
+});
 
-function click(id) {
-    console.log("asdasdasdasdasdds");
-    document.getElementById("17").disabled = false;
-    var str = id.toString() + "B"
-    console.log(str);
-    getElementById(str).hidden = false;
-}

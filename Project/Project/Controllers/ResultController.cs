@@ -119,6 +119,15 @@ namespace Project.Controllers
             return RedirectToAction("Result", new { id = photoId });
         }
 
+        [HttpPost]
+        public IActionResult UpdateComment(int photoId, int id, string content)
+        {
+            var comment = _commentRepository.GetComment(id);
+            comment.Content = content;
+            _commentRepository.Update(comment);
+            return RedirectToAction("Result", new { id = photoId });
+        }
+
         [HttpGet]
         public IActionResult GetJson(string json)
         {

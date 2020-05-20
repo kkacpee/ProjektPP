@@ -34,31 +34,43 @@
                         {
                             @foreach (var comment in Model.Comments)
                             {
-                                <li class="list-group-item bg-dark border-white">
-                                    <div>
-                                        <span class="ml-auto font-weight-bold"> @comment.UserName</span> @comment.Date
-                                        @if (User.IsInRole("Admin") || User.Identity.Name == comment.UserName)
-                                        {
-                                            <span class="dropdown float-right font-weight-bold">
-                                                <a id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    . . .
-                                                </a>
-                                                <div class="dropdown-menu" aria-labelledby="dLabel">
-                                                    <form asp-action="DeleteComment" asp-route-id="@comment.ID" asp-route-photoId="@Model.ID" method="post">
-                                                        <button class="dropdown-item" type="button" onclick="    document.getElementById(17B).hidden = false;"> Edit Comment</button>
-                                                        <button class="dropdown-item" type="submit" > Delete Comment</button>
-                                                    </form>
-                                                </div>
-                                            </span>
-                                        }
+                        <li class="list-group-item bg-dark border-white">
+                            <div>
+                                <span class="ml-auto font-weight-bold"> @comment.UserName</span> @comment.Date
+                                @if (User.IsInRole("Admin") || User.Identity.Name == comment.UserName)
+                                {
+                                    <span class="dropdown float-right font-weight-bold">
+                                        <a id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            . . .
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="dLabel">
+                                            <form asp-action="DeleteComment" asp-route-id="@comment.ID" asp-route-photoId="@Model.ID" method="post">
+                                                <button class="dropdown-item edit-btn" id="@comment.ID" type="button"> Edit Comment</button>
+                                                <button class="dropdown-item" type="submit"> Delete Comment</button>
+                                            </form>
+                                        </div>
+                                    </span>
+                                }
+                            </div>
+                            <textarea class="toglable @comment.ID" disabled >@comment.Content</textarea>
+                            <div class="toglable d-none @comment.ID">
+                                
+                                <form asp-action="UpdateComment" asp-route-id="@comment.ID" asp-route-photoId="@Model.ID" method="post">
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <textarea name="content" >@comment.Content</textarea>
+                                        </div>
+                                        <div class="col-3">
+                                            <button type="submit" class="btn btn-default text-white">OK</button>
+                                        </div>
                                     </div>
-                                    <form asp-action="UpdateComment" asp-route-id="@comment.ID" asp-route-photoId="@Model.ID" method="post">
-                                        <textarea id="@comment.ID" disabled>@comment.Content</textarea>
-                                        @{var str = comment.ID + "B";}
-                                        <button id="@str" hidden type="submit" onclick="this.hidden=true">OK</button>
-                                    </form>
-                          
-                                </li>
+                                </form>
+                                
+                               
+                            </div>
+                           
+
+                        </li>
                             }
                         }
                         else
@@ -75,7 +87,3 @@
         </div>
     </div>
 </div>
-
-@section Links {
-<script src="~/js/site.js"></script>
-}

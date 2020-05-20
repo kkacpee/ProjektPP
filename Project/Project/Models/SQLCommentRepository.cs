@@ -42,12 +42,15 @@ namespace Project.Models
 
         public Comment GetComment(int Id)
         {
-            throw new NotImplementedException();
+            return context.Comments.Find(Id);
         }
 
         public Comment Update(Comment commentChanges)
         {
-            throw new NotImplementedException();
+            var comment = context.Comments.Attach(commentChanges);
+            comment.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            context.SaveChanges();
+            return commentChanges;
         }
     }
 }

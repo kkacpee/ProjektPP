@@ -94,3 +94,21 @@ body {
 .card-footer {
     background-color: rgba(255,255,255,.1);
 }
+
+textarea:disabled {
+    background-color: rgba(255,255,255,.1);
+    color: #cbd3da;
+    border-radius: 3px 5px;
+    border: none;
+    resize: none;
+    width: 100%;
+    min-height: 20px;
+    max-height: 2220px;
+}
+
+textarea:enabled {
+    border-radius: 3px 5px;
+    resize: none;
+    border: none;
+    width: 100%;
+}
