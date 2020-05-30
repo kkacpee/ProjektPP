@@ -31,7 +31,10 @@
             <form asp-controller="Administration" asp-action="DeleteHistory" asp-route-id="@history.ID" asp-route-name="@history.UserName" method="post">
                 <button type="submit" class="btn btn-danger btn-sm float-right">Delete Entry</button>
             </form>
-            <button class="btn btn-dark btn-sm float-right mr-1">Peak result</button>
+            <form asp-controller="Result" asp-action="Peak" asp-route-id="@history.SearchId">
+                <button type="submit" class="btn btn-dark btn-sm float-right mr-1">Peak result</button>
+            </form>
+            
         </div>
                     <div class="card-body">
                         <h5 class="card-title">

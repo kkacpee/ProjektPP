@@ -47,6 +47,7 @@ namespace Project
             services.AddScoped<IEngineRepository, SQLEngineRepository>();
             services.AddScoped<IResultRepository, SQLResultRepository>();
             services.AddScoped<IHistoryRepository, SQLHistoryRepository>();
+            services.AddScoped<IScoreRepository, SQLScoreRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

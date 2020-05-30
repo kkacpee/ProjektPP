@@ -1,0 +1,42 @@
+﻿@model IEnumerable<string>
+@{
+    ViewData["Title"] = "List Phrases";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <p class="display-1">All Phrases</p>
+        </div>
+    </div>
+    @if (Model.Any())
+    {
+        <div class="col-12">
+            @foreach (var phrase in Model)
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-text">
+                            Phrase : @phrase
+                        </h5>
+                        <form asp-controller="Result" asp-action="PhraseResults" asp-route-phrase="@phrase">
+                            <button type="submit" class="btn btn-dark btn-sm float-right mr-1">Show results</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                No searches yet
+            </div>
+            <div class="card-body">
+            </div>
+        </div>
+    }
+</div>
+

@@ -20,12 +20,19 @@ namespace Project.Models
         }
         public Photo Add(Photo photo)
         {
-            throw new NotImplementedException();
+            context.Photos.Add(photo);
+            context.SaveChanges();
+            return photo;
         }
 
         public Photo Delete(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public Photo FindPhoto(string uri)
+        {
+            return context.Photos.FirstOrDefault(c => c.Url == uri);
         }
 
         public IEnumerable<Photo> GetAllPhotos()

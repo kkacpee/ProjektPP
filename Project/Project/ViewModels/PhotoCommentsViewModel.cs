@@ -14,6 +14,8 @@ namespace Project.ViewModels
         public int ResY { get; set; }
         public string PhotoFormat { get; set; }
         public DateTime Date { get; set; }
+
+        public bool Voted { get; set; }
         public IEnumerable<CommentWithName> Comments { get; set; }
     }
 }

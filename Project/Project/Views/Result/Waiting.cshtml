@@ -1,0 +1,23 @@
+﻿@model Search
+
+
+@{
+    ViewData["Title"] = "Waiting";
+}
+
+
+
+<div class="container d-flex justify-content-center align-items-center hght">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <div class="col">
+            Waiting for server response...
+        </div>
+        <div class="lds-dual-ring"></div>
+    </div>
+   
+    <form class="redirect" asp-controller="Result" asp-action="Waiting" method="post" hidden>
+        <input type="number" value="@Model.ID"/>
+    </form>
+    
+</div>
+

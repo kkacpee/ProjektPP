@@ -44,7 +44,7 @@ namespace Project.Models
 
         public History GetHistory(int Id)
         {
-            throw new NotImplementedException();
+            return context.Histories.Where(d => d.SearchId == Id).FirstOrDefault();
         }
 
         public IEnumerable<History> GetHistoryForUser(string id)

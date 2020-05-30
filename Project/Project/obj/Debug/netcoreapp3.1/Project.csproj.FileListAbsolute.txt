@@ -441,3 +441,6 @@ C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Project.MvcApplicationPartsA
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\EditEngine.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\ListHistories.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Account\Profile.cshtml.g.cs
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Result\Waiting.cshtml.g.cs
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\ListPhrases.cshtml.g.cs
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Result\PhraseResults.cshtml.g.cs

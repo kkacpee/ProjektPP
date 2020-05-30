@@ -1,0 +1,17 @@
+﻿@model List<Photo>
+@{
+    ViewData["Title"] = "Phrase Results";
+}
+
+    <h1>Phrase Results</h1>
+
+<div class="card-columns">
+    @foreach (var photo in Model)
+    {
+        <div class="card">
+            <a asp-controller="Result" asp-action="Result" asp-route-id="@photo.ID" asp-route-search="@null">
+                <img src="@photo.Url" class="card-img" alt="...">
+            </a>
+        </div>
+    }
+</div>

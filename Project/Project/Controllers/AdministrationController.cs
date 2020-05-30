@@ -401,14 +401,10 @@ namespace Project.Controllers
         }
 
         [HttpGet]
-        public IActionResult List()
+        public IActionResult ListPhrases()
         {
-            var result = JsonSearchList();
-            var str = JsonConvert.SerializeObject(result.Value, Formatting.Indented);
-             var list = new List<Search>();
-              list = JsonConvert.DeserializeObject<List<Search>>(str);
-              return View("ListSearches", list);
-            //return str;
+            var result = searchRepository.GetAllSearches().Select(x => x.Phrase).Distinct();
+            return View(result);
         }
 
         [HttpGet]
