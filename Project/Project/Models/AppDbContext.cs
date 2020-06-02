@@ -23,6 +23,11 @@ namespace Project.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().Where(e => e.GetTableName() == "AspNetUserRoles").SelectMany(e => e.GetForeignKeys()))
+            {
+                if (foreignKey.PrincipalEntityType.GetTableName() == "AspNetRoles")
+                    foreignKey.DeleteBehavior = DeleteBehavior.Cascade;
+            }
         }
     }
 }

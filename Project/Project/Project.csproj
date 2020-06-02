@@ -9,6 +9,22 @@
     <Compile Remove="Migrations\20200427163133_AddingIdentityASP.Designer.cs" />
     <Compile Remove="Migrations\20200504103154_NewDb.cs" />
     <Compile Remove="Migrations\20200504103154_NewDb.Designer.cs" />
+    <Compile Remove="Migrations\20200513010927_Initial.cs" />
+    <Compile Remove="Migrations\20200513010927_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200601152846_deleteBehavior.cs" />
+    <Compile Remove="Migrations\20200601152846_deleteBehavior.Designer.cs" />
+    <Compile Remove="Migrations\20200601153156_deleteBehavior.cs" />
+    <Compile Remove="Migrations\20200601153156_deleteBehavior.Designer.cs" />
+    <Compile Remove="Migrations\20200601153252_deleteBehavior.cs" />
+    <Compile Remove="Migrations\20200601153252_deleteBehavior.Designer.cs" />
+    <Compile Remove="Migrations\20200601153846_Initial.cs" />
+    <Compile Remove="Migrations\20200601153846_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200601160156_twojstary.cs" />
+    <Compile Remove="Migrations\20200601160156_twojstary.Designer.cs" />
+    <Compile Remove="Migrations\20200601160235_Initial.cs" />
+    <Compile Remove="Migrations\20200601160235_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200601160644_jazda.cs" />
+    <Compile Remove="Migrations\20200601160644_jazda.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

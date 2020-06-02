@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAALJnf3RqMLEitlOIJsykt4gAAAAACAAAAAAAQZgAAAAEAACAAAAD9aGP6KsPmXNj2lwN9xS+C38CRVOcuzcvj3nh/xw9pKQAAAAAOgAAAAAIAACAAAADmrvsSjt+t1QYSuM6a2JKrkr3kMgo/k/qjgDT8sIeRGYAAAAARuIGrqgC9oWs8BJBkHQLnMOM31cgUPgNH+h68K7JLi7AD1dPg4PbpsVe71251fS95psS+SyjnDZh1q6i2kCG7a6ZkrUqDGREFQ+NNyMcCbqf5Qm8ip50o0VkY9mnuxL9QgQDTM1YbPhZdHgsFagElpg8zTENmW1eGSrjg79wp1EAAAADhzM6Kt8eKDdal4Ccp/mo+LY7V1V1waXcu14OPikBJpmgpwbld1y/pkUF38Krhe0jHI0ECql62WspVUzDJPZQJ</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="RDSConnection">
+      <Value>Server=searchproject.ckrsknqdcimi.us-east-2.rds.amazonaws.com%3bDatabase=searchProj%3bUser ID=admin%3bPassword=kopeckacper2%3bConnect Timeout=30%3bEncrypt=False%3bTrustServerCertificate=False%3bMultipleActiveResultSets=True%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

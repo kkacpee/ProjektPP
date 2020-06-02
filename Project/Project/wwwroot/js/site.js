@@ -30,7 +30,7 @@ $.wait = function (callback, seconds) {
 
 $.wait(function () {
     $('.redirect').submit();
-}, 10)
+}, 30)
 
 
 

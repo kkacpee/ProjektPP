@@ -273,31 +273,31 @@ namespace Project.Controllers
             }
         }
 
-        [Authorize(Roles = "User")]
+       
         [HttpPost]
-        public async Task<IActionResult> DeleteUser(string id)
+        public async Task<IActionResult> DeleteRole(string id)
         {
-            var user = await userManager.FindByIdAsync(id);
+            var role = await roleManager.FindByIdAsync(id);
 
-            if (user == null)
+            if (role == null)
             {
-                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                ViewBag.ErrorMessage = $"Role with Id = {id} cannot be found";
                 return View("NotFound");
             }
             else
             {
-                var result = await userManager.DeleteAsync(user);
+                var result = await roleManager.DeleteAsync(role);
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("ListUsers");
+                    return RedirectToAction("ListRoles");
                 }
 
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
-                return View("ListUsers");
+                return View("ListRoles");
             }
         }
 

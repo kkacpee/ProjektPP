@@ -12,8 +12,9 @@
                   
                 </div>
                 <div class="col-3 d-flex justify-content-center align-items-center">
-                    <form asp-controller="Administration" asp-action="DeleteUser" asp-route-id="@ViewBag.ID" method="post">
-                        <button type="submit" class="btn btn-danger">Delete Account</button>
+                    <form asp-controller="Account" asp-action="DeleteUser" asp-route-id="@ViewBag.ID" method="post">
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('Are you sure you want do delete user: @ViewBag.Name')">Delete Account</button>
                     </form>
                 </div>
                 <div class="col-12">

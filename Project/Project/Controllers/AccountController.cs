@@ -48,8 +48,9 @@ namespace Project.Controllers
                 return Json($"Email {email} is already in use");
             }
         }
-        [AllowAnonymous]
+        
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -114,6 +115,42 @@ namespace Project.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("index", "home");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                var result = await userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    if (User.IsInRole("Admin") && User.Identity.Name != user.UserName)
+                    {
+                        return RedirectToAction("ListUsers");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Logout");
+                    }
+
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return View("ListUsers");
+            }
+        }
+
 
 
         [HttpGet]
