@@ -1,10 +1,29 @@
 ﻿@model Tuple<List<Photo>, int>
 @{
     ViewData["Title"] = "Search";
+    var temp = @Model;
 }
 
 <h1>Search</h1>
-
+<div>
+    @if(ViewBag.Clicked == false)
+    {
+    <form method="post" asp-controller="Result" asp-action="CheckN" asp-route-searchId="@Model.Item2">
+        <button class="btn btn-sm btn-dark" type="submit">Use Accuracy Filter</button>
+    </form>
+    }
+    else
+    {
+        if(ViewBag.Checked == true)
+        {
+            <p>Results have been filtered.</p>
+        }
+        else
+        {
+            <p>The Accuracy Filter for this phrase is not implemented yet.</p>
+        }
+    }
+</div>
 <div class="card-columns">
     @foreach (var photo in Model.Item1)
     {

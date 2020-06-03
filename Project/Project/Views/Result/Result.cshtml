@@ -24,15 +24,22 @@
                     <div>
                         Score : @Model.Item2.AvgScore
                     </div>
-                    @if (signInManager.IsSignedIn(User) && Model.Item2 != null && Model.Item1.Voted == false)
+                    @if (User.IsInRole("Admin"))
                     {
-                        
-                <div>
-                    <br />
-                    Is this what you were looking for?
-                    <a class="btn btn-success btn-sm p-0 px-1" asp-controller="Result" asp-action="VoteUp" asp-route-name="@User.Identity.Name" asp-route-resultID="@Model.Item2.ID"> Yes </a>
-                    <a class="btn btn-danger btn-sm p-0 px-1" asp-controller="Result" asp-action="VoteDown" asp-route-name="@User.Identity.Name" asp-route-resultID="@Model.Item2.ID"> No </a>
-                </div>
+                        <a class="btn btn-success btn-sm" asp-controller="Result" asp-action="CheckScore" asp-route-resultId="@Model.Item2.ID" > Check Score List </a>
+                    }
+                    else
+                    {
+                        @if (signInManager.IsSignedIn(User) && Model.Item2 != null && Model.Item1.Voted == false)
+                        {
+
+                            <div>
+                                <br />
+                                Is this what you were looking for?
+                                <a class="btn btn-success btn-sm p-0 px-1" asp-controller="Result" asp-action="VoteUp" asp-route-name="@User.Identity.Name" asp-route-resultID="@Model.Item2.ID"> Yes </a>
+                                <a class="btn btn-danger btn-sm p-0 px-1" asp-controller="Result" asp-action="VoteDown" asp-route-name="@User.Identity.Name" asp-route-resultID="@Model.Item2.ID"> No </a>
+                            </div>
+                        }
                     }
                 </div>
                 <div class="card-body">

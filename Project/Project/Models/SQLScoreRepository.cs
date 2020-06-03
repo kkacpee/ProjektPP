@@ -27,7 +27,13 @@ namespace Project.Models
 
         public Score Delete(int id)
         {
-            throw new NotImplementedException();
+            Score score = context.Scores.Find(id);
+            if (score != null)
+            {
+                context.Scores.Remove(score);
+                context.SaveChanges();
+            }
+            return score;
         }
 
         public IEnumerable<Score> GetAllScores()
@@ -37,7 +43,7 @@ namespace Project.Models
 
         public Score GetScore(int Id)
         {
-            throw new NotImplementedException();
+            return context.Scores.Find(Id);
         }
 
         public Score Update(Score scoreChanges)

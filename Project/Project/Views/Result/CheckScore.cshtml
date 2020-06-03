@@ -1,0 +1,51 @@
+﻿@model List<ScoreViewModel>
+
+@{
+    ViewData["Title"] = "Score List";
+}
+
+<h1>Score List</h1>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <p class="display-1">All Scores for this photo</p>
+        </div>
+    </div>
+    @if (Model.Any())
+    {
+        <div class="col-12">
+            @foreach (var s in Model)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        User : :  <a asp-controller="Account" asp-action="Profile" asp-route-name="@s.UserName">@s.UserName</a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <form asp-controller="Result" asp-action="DeleteScore" asp-route-scoreId="@s.ID" method="post">
+                                <button type="submit" class="btn btn-danger float-right">Delete Entry</button>
+                            </form>
+                        </h5>
+                        <h5 class="card-title">
+                            Phrase : @s.Phrase
+                            <br />
+                            Grade : @s.Score
+                        </h5>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                No scores for this photo yet
+            </div>
+            <div class="card-body">
+            </div>
+        </div>
+    }
+</div>

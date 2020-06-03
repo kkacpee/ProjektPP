@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -50,6 +51,7 @@ namespace Project.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Search(string phrase, string google, string pinterest)
         {
             var search = new Search
@@ -69,6 +71,17 @@ namespace Project.Controllers
                 };
                 _historyRepository.Add(history);
             }
+            //else
+            //{
+            //    var user = await userManager.FindByNameAsync("guest@guest.com");
+            //    var history = new History
+            //    {
+            //        Date = search.Date,
+            //        SearchId = search.ID,
+            //        UserId = user.Id
+            //    };
+            //    _historyRepository.Add(history);
+            //}
 
             var check = ApiTask("https://image-spider-server.herokuapp.com/schedule.json", search);
 
@@ -83,9 +96,11 @@ namespace Project.Controllers
             {
                 var photo = _photoRepository.GetPhoto(result.PhotoId);
                 photos.Add(photo);
-            }   
-
-            return View("Search", photos);
+            }
+            var tuple = new Tuple<List<Photo>, int>(photos, id);
+            ViewBag.Clicked = false;
+            ViewBag.Checked = false;
+            return View("Search", tuple);
         }
 
         [HttpGet]
@@ -94,7 +109,7 @@ namespace Project.Controllers
             Result result = null;
             var vote = false;
             List<Result> results = new List<Result>();
-            if (search != 0)
+            if (search != null)
             {
                 var sch = search ?? default;
                 result = _resultRepository.GetAllResults().Where(p => p.PhotoId == id && p.SearchId == sch).FirstOrDefault();
@@ -108,6 +123,10 @@ namespace Project.Controllers
                 var scores = _scoreRepository.GetAllScores().Where(p => p.UserId == hist.UserId && p.ResultId == result.ID);
                 if (scores.Any())
                     vote = true;
+            }
+            else
+            {
+                result = _resultRepository.GetAllResults().Where(p => p.PhotoId == id).FirstOrDefault();
             }
             Photo photo = _photoRepository.GetPhoto(id);
             List<Comment> coms = _commentRepository.GetAllComments(id).ToList();
@@ -177,7 +196,51 @@ namespace Project.Controllers
      
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Waiting(Search search)
+        {
+            return View(search);
+        }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult Waiting(int id)
+        {
+            var search = _searchRepository.GetSearch(id);
+            var searches = _searchRepository.GetAllSearches().Where(p => p.Phrase == search.Phrase && p.ID != id);
+            List<Photo> photosFromDB = new List<Photo>();
+            foreach (var s in searches)
+            {
+                var results = _resultRepository.GetResultsForSearch(s.ID);
+                foreach (var result in results)
+                {
+                    var photo = _photoRepository.GetPhoto(result.PhotoId);
+                    if (!photosFromDB.Contains(photo))
+                    {
+                        photosFromDB.Add(photo);
+                    }
+
+                }
+            }
+            List<Photo> listFromApi = new List<Photo>();
+            if (searches.Any())
+            {
+                var lastId = searches.Last().ID;
+                listFromApi.AddRange(ApiHandler("https://image-spider-client.herokuapp.com/results", lastId));
+            }
+            
+            listFromApi.AddRange(ApiHandler("https://image-spider-client.herokuapp.com/results", id));
+            List<Photo> photos = new List<Photo>();
+            photos.AddRange(photosFromDB);
+            photos.AddRange(listFromApi);
+            photos.Reverse();
+            photos.Distinct();
+            var tuple = new Tuple<List<Photo>, int>(photos, id);
+            ViewBag.Changes = false;
+            ViewBag.Clicked = false;
+            return View("Search", tuple);
+        }
 
         public List<Photo> ApiHandler(string uri, int id)
         {
@@ -194,12 +257,12 @@ namespace Project.Controllers
                 var responseTask = client.PostAsync(client.BaseAddress, formContent);
                 responseTask.Wait();
 
-               var result = responseTask.Result;
+                var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
                     var readJob = result.Content.ReadAsStringAsync();
                     readJob.Wait();
-                    str = readJob.Result; 
+                    str = readJob.Result;
                     if (JObject.Parse(str)["image_count"].Equals("0"))
                         return outputList;
                     str = JObject.Parse(str)["images"].ToString();
@@ -211,7 +274,7 @@ namespace Project.Controllers
                         photo.ID = 0;
                         Photo returnedPhoto;
                         var control = _photoRepository.FindPhoto(photo.Url);
-                        if(control == null)
+                        if (control == null)
                         {
                             returnedPhoto = _photoRepository.Add(photo);
                         }
@@ -237,7 +300,6 @@ namespace Project.Controllers
                 return outputList;
             }
         }
-
         public int ApiTask(string uri, Search search)
         {
             using (var client = new HttpClient())
@@ -271,47 +333,6 @@ namespace Project.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult Waiting(Search search)
-        {
-            return View(search);
-        }
-
-        [HttpPost]
-        public IActionResult Waiting(int id)
-        {
-            var search = _searchRepository.GetSearch(id);
-            var searches = _searchRepository.GetAllSearches().Where(p => p.Phrase == search.Phrase && p.ID != id);
-            List<Photo> photosFromDB = new List<Photo>();
-            foreach (var s in searches)
-            {
-                var results = _resultRepository.GetResultsForSearch(s.ID);
-                foreach (var result in results)
-                {
-                    var photo = _photoRepository.GetPhoto(result.PhotoId);
-                    if (!photosFromDB.Contains(photo))
-                    {
-                        photosFromDB.Add(photo);
-                    }
-
-                }
-            }
-            List<Photo> listFromApi = new List<Photo>();
-            if (searches.Any())
-            {
-                var lastId = searches.Last().ID;
-                listFromApi.AddRange(ApiHandler("https://image-spider-client.herokuapp.com/results/", lastId));
-            }
-            
-            listFromApi.AddRange(ApiHandler("https://image-spider-client.herokuapp.com/results/", id));
-            List<Photo> photos = new List<Photo>();
-            photos.AddRange(photosFromDB);
-            photos.AddRange(listFromApi);
-            photos.Reverse();
-            photos.Distinct();
-            var tuple = new Tuple<List<Photo>, int>(photos, id);
-            return View("Search", tuple);
-        }
 
         public IActionResult PhraseResults(string phrase)
         {
@@ -379,6 +400,161 @@ namespace Project.Controllers
             {
                 res.AvgScore += grade;
                 _resultRepository.Update(res);
+            }
+        }
+
+        public IActionResult DeleteScore(int scoreId)
+        {
+            var score = _scoreRepository.GetScore(scoreId);
+            var result = _resultRepository.GetResult(score.ResultId);
+            var grade = score.Grade * (-1);
+            UpdateScores(grade, result);
+            _scoreRepository.Delete(scoreId);
+
+            return RedirectToAction("CheckScore", new { resultId = result.ID });
+        }
+
+        public async Task<IActionResult> CheckScore(int resultId)
+        {
+            var result = _resultRepository.GetResult(resultId);
+            var results = _resultRepository.GetAllResults().Where(e => e.PhotoId == result.PhotoId);
+            var scores = _scoreRepository.GetAllScores();
+            var scoreList = new List<Score>();
+            foreach(var res in results)
+            {
+                scoreList.AddRange(scores.Where(e => e.ResultId == res.ID));
+            }
+            var scoreViewsList = new List<ScoreViewModel>();
+            foreach(var score in scoreList)
+            {
+                result = _resultRepository.GetResult(score.ResultId);
+                var search = _searchRepository.GetSearch(result.SearchId);
+                var user = await userManager.FindByIdAsync(score.UserId);
+                scoreViewsList.Add(new ScoreViewModel
+                {
+                    ID = score.ID,
+                    Phrase = search.Phrase,
+                    UserName = user.UserName,
+                    Score = score.Grade
+                });
+            }
+
+            return View(scoreViewsList);
+        }
+
+        [HttpPost]
+        public IActionResult CheckN(int searchId)
+        //public IActionResult CheckN(Tuple<List<Photo>, int> input)
+        {
+            //  var list = input.Item1;
+            //  var searchId = input.Item2;
+            var search = _searchRepository.GetSearch(searchId);
+            var searches = _searchRepository.GetAllSearches().Where(p => p.Phrase == search.Phrase);
+            List<Photo> photosFromDB = new List<Photo>();
+            foreach (var s in searches)
+            {
+                var results = _resultRepository.GetResultsForSearch(s.ID);
+                foreach (var result in results)
+                {
+                    var photo = _photoRepository.GetPhoto(result.PhotoId);
+                    if (!photosFromDB.Contains(photo))
+                    {
+                        photosFromDB.Add(photo);
+                    }
+
+                }
+            }
+            var isImplementedUri = new Uri("http://15.236.208.227:8133/isImplemented"); //Get
+            var checkNUri = new Uri("http://15.236.208.227:8133/checkN"); //Get
+            ViewBag.Clicked = true;
+            if(IsImplementedHandler(isImplementedUri, search))
+            {
+                var output = CheckNHandler(checkNUri, search, photosFromDB);
+                var tuple = new Tuple<List<Photo>, int>(output, searchId);
+                ViewBag.Changes = true;
+                return View("Search", tuple);
+            }
+            else
+            {
+                var tuple = new Tuple<List<Photo>, int>(photosFromDB, searchId);
+                ViewBag.Changes = false;
+                return View("Search", tuple);
+            }
+
+        }
+
+
+        public bool IsImplementedHandler(Uri uri, Search search)
+        {
+            
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = uri;
+                Dictionary<string, string> pairs = new Dictionary<string, string>();
+                pairs.Add("label", search.Phrase);
+
+                StringContent sc = new StringContent(JsonConvert.SerializeObject(pairs), UnicodeEncoding.UTF8, "application/json");
+                var responseTask = client.PostAsync(client.BaseAddress, sc);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readJob = result.Content.ReadAsStringAsync();
+                    readJob.Wait();
+                    var str = readJob.Result;
+                    var value = JObject.Parse(str)["value"];
+                    var strValue = value.ToString();
+                    if (strValue.Equals("True"))
+                        return true;
+                    else
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public List<Photo> CheckNHandler(Uri uri, Search search, List<Photo> input)
+        {
+            var outputList = new List<Photo>();
+            var jsonList = new List<Dictionary<string, string>>();
+            foreach (var photo in input)
+            {
+                jsonList.Add(new Dictionary<string, string> {
+                    {"label", search.Phrase },
+                    {"url", photo.Url }
+                });
+            }
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = uri;
+                StringContent sc = new StringContent(JsonConvert.SerializeObject(jsonList), UnicodeEncoding.UTF8, "application/json");
+                var responseTask = client.PostAsync(client.BaseAddress, sc);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readJob = result.Content.ReadAsStringAsync();
+                    readJob.Wait();
+                    var arr = JArray.Parse(readJob.Result);
+                    int i = 0;
+                    foreach(var photo in input)
+                    {
+                        if(arr[i].ToString() == "True")
+                        {
+                            outputList.Add(photo);
+                        }
+                        i++;
+                    }
+                }
+                else
+                {
+                }
+
+                return outputList;
             }
         }
     }

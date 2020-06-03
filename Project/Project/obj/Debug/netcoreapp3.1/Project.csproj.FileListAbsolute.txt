@@ -444,3 +444,4 @@ C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Account\Profile.
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Result\Waiting.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\ListPhrases.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Result\PhraseResults.cshtml.g.cs
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Result\CheckScore.cshtml.g.cs
