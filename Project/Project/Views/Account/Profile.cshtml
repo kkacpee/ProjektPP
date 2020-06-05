@@ -1,6 +1,7 @@
 ﻿@model List<HistoriesWithNames>
 @{
     ViewData["Title"] = "Profile";
+     var phraseList = Model.Select(e => e.Phrase).Distinct();
 }
     <div class="container">
         <div class="card">
@@ -9,12 +10,14 @@
                     <div class="card-body display-3">
                         @ViewBag.Name
                     </div>
-                  
+
                 </div>
                 <div class="col-3 d-flex justify-content-center align-items-center">
                     <form asp-controller="Account" asp-action="DeleteUser" asp-route-id="@ViewBag.ID" method="post">
                         <button type="submit" class="btn btn-danger"
-                                onclick="return confirm('Are you sure you want do delete user: @ViewBag.Name')">Delete Account</button>
+                                onclick="return confirm('Are you sure you want do delete user: @ViewBag.Name')">
+                            Delete Account
+                        </button>
                     </form>
                 </div>
                 <div class="col-12">
@@ -23,30 +26,72 @@
                     </div>
                 </div>
             </div>
+            <div >
+            <form name="filters" method="post" asp-action="FilteredProfile" asp-controller="Account" asp-route-name="@ViewBag.Name">
+                <button type="button" class="btn btn-dark filtersShow m-1">Filters</button>
+                <div class="row filtersForm d-none">
+                    <div class="col-8 offset-2">
+                        <br />
+                        <div class="row">
+                            <div class="col-2 offset-2">
+                                <label for="phraseCheck">Phrase</label>
+                                <input type="checkbox" name="phraseCheck" />
+                            </div>
+
+                            <div class="col-8">
+                                <select class="browser-default custom-select" name="phraseSelect">
+                                    @foreach (var phrase in phraseList)
+                                    {
+                                        <option value="@phrase">@phrase</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-2 offset-2">
+                                <label for="dateCheck">Date</label>
+                                <input type="checkbox" name="dateCheck" />
+                            </div>
+                            <div class="col-8">
+                                <label for="dateFrom">From: </label>
+                                <input type="date" name="dateFrom" />
+                                <label for="dateTo">To: </label>
+                                <input type="date" name="dateTo" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button type="submit" class="btn btn-dark filtersShow m-1 ml-auto">Apply Filters</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            </div>
+
             @foreach (var history in Model)
             {
-                
-        <div class="card-header border-top">
-            History Id : @history.ID
 
-            <form asp-controller="Administration" asp-action="DeleteHistory" asp-route-id="@history.ID" asp-route-name="@history.UserName" method="post">
-                <button type="submit" class="btn btn-danger btn-sm float-right">Delete Entry</button>
-            </form>
-            <form asp-controller="Result" asp-action="Peak" asp-route-id="@history.SearchId">
-                <button type="submit" class="btn btn-dark btn-sm float-right mr-1">Peak result</button>
-            </form>
-            
-        </div>
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            User : @history.UserName
-                        </h5>
-                        <h5 class="card-title">
-                            Search Phrase : @history.Phrase
-                            <br />
-                            Search Date : @history.Date
-                        </h5>
-                    </div>
+                <div class="card-header border-top">
+                    History Id : @history.ID
+
+                    <form asp-controller="Administration" asp-action="DeleteHistory" asp-route-id="@history.ID" asp-route-name="@history.UserName" method="post">
+                        <button type="submit" class="btn btn-danger btn-sm float-right">Delete Entry</button>
+                    </form>
+                    <form asp-controller="Result" asp-action="Peak" asp-route-id="@history.SearchId">
+                        <button type="submit" class="btn btn-dark btn-sm float-right mr-1">Peak result</button>
+                    </form>
+
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        User : @history.UserName
+                    </h5>
+                    <h5 class="card-title">
+                        Search Phrase : @history.Phrase
+                        <br />
+                        Search Date : @history.Date
+                    </h5>
+                </div>
             }
         </div>
     </div>

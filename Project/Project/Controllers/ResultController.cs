@@ -52,8 +52,10 @@ namespace Project.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Search(string phrase, string google, string pinterest)
+        [HttpPost]
+        public async Task<IActionResult> Search(string phrase)
         {
+            var name = Request.Form["engine"].ToString();
             var search = new Search
             {
                 Phrase = phrase,
@@ -83,7 +85,7 @@ namespace Project.Controllers
             //    _historyRepository.Add(history);
             //}
 
-            var check = ApiTask("https://image-spider-server.herokuapp.com/schedule.json", search);
+            var check = ApiTask("https://image-spider-server.herokuapp.com/schedule.json",name ,search);
 
             return RedirectToAction("Waiting", search);
         }
@@ -300,7 +302,7 @@ namespace Project.Controllers
                 return outputList;
             }
         }
-        public int ApiTask(string uri, Search search)
+        public int ApiTask(string uri,string name ,Search search)
         {
             using (var client = new HttpClient())
             {
@@ -309,7 +311,15 @@ namespace Project.Controllers
                 //var spider = new Uri(link);
                 Dictionary<string, string> pairs = new Dictionary<string, string>();
                 pairs.Add("project", "Spiders");
-                pairs.Add("spider", "GoogleImages");
+                if(name == "Pinterest")
+                {
+                    pairs.Add("spider", "Pinterest");
+                }
+                else
+                {
+                    pairs.Add("spider", "GoogleImages");
+                }
+                
                 pairs.Add("term", search.Phrase.ToString());
                 pairs.Add("amount", "50");
                 pairs.Add("crawlid", search.ID.ToString());
@@ -441,7 +451,7 @@ namespace Project.Controllers
 
             return View(scoreViewsList);
         }
-
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult CheckN(int searchId)
         //public IActionResult CheckN(Tuple<List<Photo>, int> input)
@@ -471,13 +481,13 @@ namespace Project.Controllers
             {
                 var output = CheckNHandler(checkNUri, search, photosFromDB);
                 var tuple = new Tuple<List<Photo>, int>(output, searchId);
-                ViewBag.Changes = true;
+                ViewBag.Checked = true;
                 return View("Search", tuple);
             }
             else
             {
                 var tuple = new Tuple<List<Photo>, int>(photosFromDB, searchId);
-                ViewBag.Changes = false;
+                ViewBag.Checked = false;
                 return View("Search", tuple);
             }
 

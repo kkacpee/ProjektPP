@@ -8,6 +8,11 @@ $(document).on("click", ".edit-btn", function (event) {
     $('.' + event.target.id + '.toglable').toggleClass('d-none');
 });
 
+$(document).on("click", ".filtersShow", function (event) {
+    console.log("siema");
+    $('.filtersForm').toggleClass('d-none');
+});
+
 
 $(document).on("click", ".b-filters", function (event) {
     console.log("siema");

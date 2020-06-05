@@ -187,5 +187,50 @@ namespace Project.Controllers
             }
             return RedirectToAction("AccessDenied");
         }
+  
+
+    [HttpPost]
+    public async Task<IActionResult> FilteredProfile(string name)
+    {
+        ViewBag.Name = name;
+        if (User.IsInRole("Admin") || User.Identity.Name == name)
+        {
+            var phraseCheck = Request.Form["phraseCheck"].ToString();
+            var phraseSelect = Request.Form["phraseSelect"].ToString();
+            var dateCheck = Request.Form["dateCheck"].ToString();
+            var dateFrom = Request.Form["dateFrom"].ToString();
+            var dateTo = Request.Form["dateTo"].ToString();
+
+            var user = await userManager.FindByNameAsync(name);
+            ViewBag.ID = user.Id;
+            var results = historyRepository.GetHistoryForUser(user.Id);
+            List<History> list = new List<History>();
+            list = results.ToList();
+            HistoriesWithNames hisWithName;
+            List<HistoriesWithNames> listWithNames = new List<HistoriesWithNames>();
+            foreach (var his in list)
+            {
+                var usr = await userManager.FindByIdAsync(his.UserId);
+                var srch = searchRepository.GetSearch(his.SearchId);
+                hisWithName = new HistoriesWithNames(his, usr.Email, srch.Phrase);
+                listWithNames.Add(hisWithName);
+            }
+            if (phraseCheck.Equals("on"))
+            {
+                listWithNames = listWithNames.Where(e => e.Phrase == phraseSelect).ToList();
+            }
+            if (dateCheck.Equals("on"))
+            {
+                listWithNames = listWithNames.Where(e => e.Date >= Convert.ToDateTime(dateFrom) && e.Date <= Convert.ToDateTime(dateTo)).ToList();
+            }
+
+            listWithNames.Reverse();
+
+
+            return View("Profile", listWithNames);
+        }
+        return RedirectToAction("AccessDenied");
+    }
+
     }
 }

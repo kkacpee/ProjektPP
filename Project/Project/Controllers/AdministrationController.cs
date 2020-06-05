@@ -407,14 +407,45 @@ namespace Project.Controllers
             return View(result);
         }
 
-        [HttpGet]
-        public string JsonTest()
+        [HttpPost]
+        public async Task<IActionResult> FilteredHistories()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get,
-            "https://jsonplaceholder.typicode.com/todos/1");
-            string str = "";
-            str = request.ToString();
-            return str;
+            var userCheck = Request.Form["userCheck"].ToString();
+            var userSelect = Request.Form["userSelect"].ToString();
+            var phraseCheck = Request.Form["phraseCheck"].ToString();
+            var phraseSelect = Request.Form["phraseSelect"].ToString();
+            var dateCheck = Request.Form["dateCheck"].ToString();
+            var dateFrom = Request.Form["dateFrom"].ToString();
+            var dateTo = Request.Form["dateTo"].ToString();
+
+
+            var results = historyRepository.GetAllHistories();
+            List<History> list = new List<History>();
+            list = results.ToList();
+            HistoriesWithNames hisWithName;
+            List<HistoriesWithNames> listWithNames = new List<HistoriesWithNames>();
+            foreach (var his in list)
+            {
+                var usr = await userManager.FindByIdAsync(his.UserId);
+                var srch = searchRepository.GetSearch(his.SearchId);
+                hisWithName = new HistoriesWithNames(his, usr.Email, srch.Phrase);
+                listWithNames.Add(hisWithName);
+            }
+
+            if (userCheck.Equals("on"))
+            {
+                listWithNames = listWithNames.Where(e => e.UserName == userSelect).ToList();
+            }
+            if (phraseCheck.Equals("on"))
+            {
+                listWithNames = listWithNames.Where(e => e.Phrase == phraseSelect).ToList();
+            }
+            if (dateCheck.Equals("on"))
+            {
+                listWithNames = listWithNames.Where(e => e.Date >= Convert.ToDateTime(dateFrom) && e.Date <= Convert.ToDateTime(dateTo)).ToList();
+            }
+            listWithNames.Reverse();
+            return View("ListHistories", listWithNames);
         }
 
     }

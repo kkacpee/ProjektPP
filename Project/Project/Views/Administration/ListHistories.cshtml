@@ -3,6 +3,8 @@
 
 @{
     ViewBag.Title = "All Histories";
+    var userList = Model.Select(e => e.UserName).Distinct();
+    var phraseList = Model.Select(e => e.Phrase).Distinct();
 }
 
 <div class="container">
@@ -14,6 +16,60 @@
     @if (Model.Any())
     {
         <div class="col-12">
+            <form name="filters" method="post" asp-action="FilteredHistories" asp-controller="Administration">
+                <button type="button" class="btn btn-dark filtersShow m-1">Filters</button>
+                <div class="row filtersForm d-none">
+                    <div class="col-8 offset-2">
+                        <div class="row">
+                            <div class="col-2 offset-2">
+                                <label for="userCheck">User</label>
+                                <input type="checkbox" name="userCheck" />
+                            </div>
+
+                            <div class="col-8">
+                                <select class="browser-default custom-select" name="userSelect">
+                                    @foreach (var hist in userList)
+                                    {
+                                        <option value="@hist">@hist</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-2 offset-2">
+                                <label for="phraseCheck">Phrase</label>
+                                <input type="checkbox" name="phraseCheck" />
+                            </div>
+
+                            <div class="col-8">
+                                <select class="browser-default custom-select" name="phraseSelect">
+                                    @foreach (var phrase in phraseList)
+                                    {
+                                        <option value="@phrase">@phrase</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-2 offset-2">
+                                <label for="dateCheck">Date</label>
+                                <input type="checkbox" name="dateCheck" />
+                            </div>
+                            <div class="col-8">
+                                <label for="dateFrom">From: </label>
+                                <input type="date" name="dateFrom" />
+                                <label for="dateTo">To: </label>
+                                <input type="date" name="dateTo" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button type="submit" class="btn btn-dark filtersShow m-1 ml-auto">Apply Filters</button>
+                        </div>
+                    </div> 
+                </div>
+            </form>
             @foreach (var history in Model)
             {
                 <div class="card">
@@ -23,8 +79,11 @@
                     <div class="card-body">
                         <h5 class="card-title">
                             User : <a asp-controller="Account" asp-action="Profile" asp-route-name="@history.UserName">@history.UserName</a>
+                            <form asp-controller="Result" asp-action="Peak" asp-route-id="@history.SearchId">
+                                <button type="submit" class="btn btn-dark btn-sm float-right mr-1">Peak result</button>
+                            </form>
                             <form asp-controller="Administration" asp-action="DeleteHistory" asp-route-id="@history.ID" asp-route-name="" method="post">
-                                <button type="submit" class="btn btn-danger float-right">Delete Entry</button>
+                                <button type="submit" class="btn btn-danger btn-sm float-right">Delete Entry</button>
                             </form>
                         </h5>
                         <h5 class="card-title">
