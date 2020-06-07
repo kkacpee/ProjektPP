@@ -448,5 +448,10 @@ namespace Project.Controllers
             return View("ListHistories", listWithNames);
         }
 
+
+        public IActionResult Diagram()
+        {
+            return View();
+        }
     }
 }

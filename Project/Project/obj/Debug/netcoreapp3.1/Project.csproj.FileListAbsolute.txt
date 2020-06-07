@@ -445,3 +445,5 @@ C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Result\Waiting.c
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\ListPhrases.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Result\PhraseResults.cshtml.g.cs
 C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Result\CheckScore.cshtml.g.cs
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Administration\Diagram.cshtml.g.cs
+C:\Projects\Project\Project\obj\Debug\netcoreapp3.1\Razor\Views\Home\Rau.cshtml.g.cs

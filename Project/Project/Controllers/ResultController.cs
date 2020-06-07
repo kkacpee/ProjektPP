@@ -267,7 +267,9 @@ namespace Project.Controllers
                     str = readJob.Result;
                     if (JObject.Parse(str)["image_count"].Equals("0"))
                         return outputList;
+                    var engine = JObject.Parse(str)["spider"];
                     str = JObject.Parse(str)["images"].ToString();
+                    
                     var list = JsonConvert.DeserializeObject<List<Photo>>(str);
 
                     Result res;
@@ -289,7 +291,7 @@ namespace Project.Controllers
                         res = new Result
                         {
                             PhotoId = returnedPhoto.ID,
-                            EngineId = 1,
+                            EngineId = engine.Equals("GoogleImages") ? 1 : 2,
                             SearchId = id
                         };
                         _resultRepository.Add(res);
@@ -307,8 +309,6 @@ namespace Project.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(uri);
-                //var link = "https://image-spider-server.herokuapp.com/schedule.json";
-                //var spider = new Uri(link);
                 Dictionary<string, string> pairs = new Dictionary<string, string>();
                 pairs.Add("project", "Spiders");
                 if(name == "Pinterest")
@@ -329,7 +329,6 @@ namespace Project.Controllers
                 var responseTask = client.PostAsync(client.BaseAddress, formContent);
                 StringContent sc = new StringContent(JsonConvert.SerializeObject(pairs), UnicodeEncoding.UTF8, "application/json");
 
-                //var responseTask = client.PostAsync(client.BaseAddress, sc);
                 responseTask.Wait();
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
